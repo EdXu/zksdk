@@ -434,6 +434,7 @@ func (this *ZkSdk) GetSonsMoreWX(path string, exitCh chan bool, hand SonHandler)
 		var msg *TPubMsg
 		var ok bool
 		oldSons := make(map[string]string, 0)
+		_,_,oldSons = DiffNodes(data, oldSons) //这个是新加的，没有验证过，需要看看对不对
 		for {
 			select {
 			case msg, ok = <-WatchCh:
