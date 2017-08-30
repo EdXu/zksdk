@@ -35,7 +35,7 @@ type TPubMsg struct {
 }
 
 type SonHandler interface {
-	Proc(add, del []string, stat *zk.Stat, delFlag bool)
+	Proc(all, add, del []string, stat *zk.Stat, delFlag bool)
 }
 
 type DataHandler interface {
@@ -449,7 +449,7 @@ func (this *ZkSdk) GetSonsMoreWX(path string, exitCh chan bool, hand SonHandler)
 			}
 			add, del, newMap := DiffNodes(msg.Sons, oldSons)
 			oldSons = newMap
-			hand.Proc(add, del, msg.Stat, msg.DelFlag)
+			hand.Proc(msg.Sons, add, del, msg.Stat, msg.DelFlag)
 			if msg.DelFlag {
 				return
 			}
@@ -697,7 +697,7 @@ func (this *ZkSdk) WatchChildX(path string, exitCh chan bool, hand SonHandler, u
 				logger.Info("node[%s] children change[%v]", path, data)
 				add, del, newMap := DiffNodes(data, oldSons)
 				oldSons = newMap
-				hand.Proc(add, del, stat, false)
+				hand.Proc(data, add, del, stat, false)
 				oldCVer = stat.Cversion
 			}
 
