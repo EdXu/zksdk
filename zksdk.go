@@ -308,13 +308,13 @@ func (this *ZkSdk) GetMoreW(path string, exitCh chan bool) ([]byte, *zk.Stat, <-
 }
 
 //获取并持续订阅数据变化, X表示采用回调处理方式
-func (this *ZkSdk) GetMoreWX(path string, exitCh chan bool, hand DataHandler) ([]byte, *zk.Stat, <-chan *TPubMsg, error) {
+func (this *ZkSdk) GetMoreWX(path string, exitCh chan bool, hand DataHandler) ([]byte, *zk.Stat, error) {
 	if !this.mRunFlag {
-		return nil, nil, nil, fmt.Errorf("ZkSdk not started")
+		return nil, nil, fmt.Errorf("ZkSdk not started")
 	}
 	data, stat, WatchCh, err := this.GetMoreW(path, exitCh)
 	if err != nil {
-		return data, stat, WatchCh, err
+		return data, stat, err
 	}
 	go func() {
 		var msg *TPubMsg
@@ -338,7 +338,7 @@ func (this *ZkSdk) GetMoreWX(path string, exitCh chan bool, hand DataHandler) ([
 		}
 	}()
 
-	return data, stat, WatchCh, err
+	return data, stat, err
 }
 
 //获取子节点名称
@@ -422,13 +422,13 @@ func (this *ZkSdk) GetSonsMoreW(path string, exitCh chan bool) ([]string, *zk.St
 }
 
 //获取子节点，并持续订阅子节点个数的变化，采用回调方式处理
-func (this *ZkSdk) GetSonsMoreWX(path string, exitCh chan bool, hand SonHandler) ([]string, *zk.Stat, <-chan *TPubMsg, error) {
+func (this *ZkSdk) GetSonsMoreWX(path string, exitCh chan bool, hand SonHandler) ([]string, *zk.Stat, error) {
 	if !this.mRunFlag {
-		return nil, nil, nil, fmt.Errorf("ZkSdk not started")
+		return nil, nil, fmt.Errorf("ZkSdk not started")
 	}
 	data, stat, WatchCh, err := this.GetSonsMoreW(path, exitCh)
 	if err != nil {
-		return data, stat, WatchCh, err
+		return data, stat, err
 	}
 	go func() {
 		var msg *TPubMsg
@@ -456,7 +456,7 @@ func (this *ZkSdk) GetSonsMoreWX(path string, exitCh chan bool, hand SonHandler)
 		}
 	}()
 
-	return data, stat, WatchCh, err
+	return data, stat, err
 }
 
 //////////////////////////////////老接口，将废弃///////////////////////////////////
